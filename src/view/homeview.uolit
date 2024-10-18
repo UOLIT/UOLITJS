@@ -1,0 +1,16 @@
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <a href="sample" class="link">Sample</a>
+        </div>
+        
+        <div class="col-md-6 align-items-center justify-content-center">
+            <p>
+                <h5>Welcome to UOLITJS</h5>
+            </p>
+            <p>
+                <h5>Creating Without Limits and Rules</h5>
+            </p>
+        </div>
+    </div>
+</div>

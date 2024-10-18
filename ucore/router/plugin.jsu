@@ -1,0 +1,42 @@
+function getData(param) {    
+    var currentUrl = window.location.href;
+        currentUrl = currentUrl.replace('#/','');
+    var urlLink = new URL(currentUrl);
+    var data = urlLink.searchParams.get(param);
+    return data;
+}
+
+async function submitForm(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const url = form.action;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${TOKEN}`,
+            },
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        
+        if (result.redirectUrl) {
+            window.redirect(result.redirectUrl);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+const forms = document.querySelectorAll('form');
+forms.forEach(form => {
+    form.addEventListener('submit', submitForm);
+});

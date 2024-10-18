@@ -1,0 +1,22 @@
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <div u-if="users.length > 0">
+                <h5>Sample Array</h5>
+                <ol>
+                    <li u-for="a in users">Nama: {{ a.name }} - Umur: {{ a.age }}</li>
+                </ol>
+                <a href="home" class="link">Back</a>
+            </div>
+        </div>
+        
+        <div class="col-md-6 align-items-center justify-content-center">
+            <p>
+                <h5>Welcome to UOLITJS</h5>
+            </p>
+            <p>
+                <h5>Creating Without Limits and Rules</h5>
+            </p>
+        </div>
+    </div>
+</div>
