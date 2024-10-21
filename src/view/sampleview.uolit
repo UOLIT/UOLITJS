@@ -1,4 +1,4 @@
-<div class="container my-5">
+<div class="container">
     <div class="row">
         <div class="col-md-6">
             <div u-if="users.length > 0">
@@ -7,16 +7,13 @@
                     <li u-for="a in users">Nama: {{ a.name }} - Umur: {{ a.age }}</li>
                 </ol>
                 <a href="home" class="link">Back</a>
-                <a href="get?id=123&nama=Joni" class="link">Sample Get</a>
+                <a href="get?id=123&name=Joni" class="link">Sample Get</a>
             </div>
        </div>
         
         <div class="col-md-6 align-items-center justify-content-center">
             <p>
-                <h5>Welcome to UOLITJS</h5>
-            </p>
-            <p>
-                <h5>Creating Without Limits and Rules</h5>
+                <h5>Start your day with a smile</h5>
             </p>
         </div>
     </div>
