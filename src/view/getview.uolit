@@ -1,18 +1,21 @@
-<div class="container my-5">
+<div class="container">
     <div class="row">
         <div class="col-md-6">
             <h5>Sample Get</h5>
-            <p>ID: <span u-get="id"></span></p>
-            <p>Nama: <span u-get="nama"></span></p>
+            <ul>
+                <li>
+                    ID : <span u-get="id"></span><br>
+                </li>
+                <li>
+                    Name : <span u-get="name"></span>
+                </li>
+            </ul>
             <a href="sample" class="link">Back</a>
        </div>
         
         <div class="col-md-6 align-items-center justify-content-center">
             <p>
-                <h5>Welcome to UOLITJS</h5>
-            </p>
-            <p>
-                <h5>Creating Without Limits and Rules</h5>
+                <h5>Make your work part of a very fun game</h5>
             </p>
         </div>
     </div>
