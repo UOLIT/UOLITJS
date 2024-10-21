@@ -1,3 +1,3 @@
 <install u-inst="ucore/router/plugin.jsu"></install>
 <install u-inst="src/jsu/data.jsu"></install>
-<install u-inst="src/view/sampleview.uolit"></install>
+<install u-inst="src/view/getview.uolit"></install>

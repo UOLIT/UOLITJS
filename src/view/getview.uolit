@@ -1,14 +1,10 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-md-6">
-            <div u-if="users.length > 0">
-                <h5>Sample Array</h5>
-                <ol>
-                    <li u-for="a in users">Nama: {{ a.name }} - Umur: {{ a.age }}</li>
-                </ol>
-                <a href="home" class="link">Back</a>
-                <a href="get?id=123&nama=Joni" class="link">Sample Get</a>
-            </div>
+            <h5>Sample Get</h5>
+            <p>ID: <span u-get="id"></span></p>
+            <p>Nama: <span u-get="nama"></span></p>
+            <a href="sample" class="link">Back</a>
        </div>
         
         <div class="col-md-6 align-items-center justify-content-center">
