@@ -8,7 +8,6 @@ async function handleInstallElements() {
         const filePath = element.getAttribute('u-inst');
         if (filePath) {
             await importJs(filePath, () => {
-                console.log(`Loaded: ${filePath}`);
                 element.remove();
             });
         }
@@ -152,7 +151,6 @@ async function importMenu(file, callback) {
         refreshUI();
     } catch (error) {
         targetElement.innerHTML = '<h1>Error loading content</h1>';
-        console.error(error);
     }
 }
 
