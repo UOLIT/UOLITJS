@@ -1,35 +1,5 @@
 import { LOGIN, AVAILABLE_PAGES, BASE_URL, ERROR_404_PATH } from '../config/constants.js';
 
-async function importJs(file, callback) {
-    
-    const existingScript = document.querySelector(`script[src="${file}"]`);
-    if (existingScript) {
-        existingScript.remove();
-    }
-
-    const script = document.createElement('script');
-    script.src = file;
-    script.async = true;
-
-    script.onload = () => {
-        if (callback) callback();
-    };
-
-    script.onerror = () => {
-        console.error(`Failed to load JS: ${file}`);
-        if (callback) callback(new Error(`Failed to load: ${file}`));
-    };
-
-    const targetElement = document.getElementById('content');
-    if (targetElement) {
-        targetElement.innerHTML = '';
-        targetElement.appendChild(script);
-    } else {
-        document.head.appendChild(script);
-    }
-}
-
-
 async function handleInstallElements() {
 
     const installElements = document.querySelectorAll('install');
@@ -47,6 +17,7 @@ async function handleInstallElements() {
 
 document.addEventListener('DOMContentLoaded', handleInstallElements);
 
+
 async function importHtml(file, page = '', callback) {
     const targetElement = document.getElementById('content');
     if (!targetElement) return;
@@ -58,15 +29,24 @@ async function importHtml(file, page = '', callback) {
     showLoading();
 
     try {
-        const response = await fetch(file, { cache: 'no-cache' });
+        const response = await fetch(file+'?v='+Math.random(), { cache: 'no-cache' });
         if (!response.ok) throw new Error(`HTML file not found: ${file}`);
 
         let html = await response.text();
         const tempDiv = document.createElement('div');
-
         html = html.replace(/{url}/g, BASE_URL);
-
         tempDiv.innerHTML = html;
+
+        const elements = tempDiv.querySelectorAll('install');
+        for (const element of elements) {
+            const filePath = element.getAttribute('u-inst');
+            const ext = filePath.split('.').pop().toLowerCase();
+
+            if (ext === 'jsu') {
+                await loadJsFile(filePath);
+                element.remove();
+            }
+        }
 
         const scripts = tempDiv.querySelectorAll('script');
         scripts.forEach(script => script.remove());
@@ -75,29 +55,9 @@ async function importHtml(file, page = '', callback) {
             ? tempDiv.innerHTML 
             : targetElement.innerHTML + tempDiv.innerHTML;
 
-        const loadScripts = async () => {
-            const totalScripts = scripts.length;
-            for (let i = 0; i < totalScripts; i++) {
-                const oldScript = scripts[i];
-                const newScript = document.createElement('script');
-                if (oldScript.src) {
-                    newScript.src = oldScript.src;
-                    newScript.onload = () => {
-                        const percent = ((i + 1) / totalScripts) * 100;
-                        updateLoadingBar(percent);
-                    };
-                    targetElement.appendChild(newScript);
-                } else {
-                    newScript.textContent = oldScript.innerHTML;
-                    targetElement.appendChild(newScript);
-                    const percent = ((i + 1) / totalScripts) * 100;
-                    updateLoadingBar(percent);
-                }
-            }
-            if (typeof callback === 'function') callback();
-        };
+        await loadScriptsSequentially(scripts, targetElement);
 
-        await loadScripts();
+        if (typeof callback === 'function') callback();
         refreshUI();
     } catch (error) {
         targetElement.innerHTML = '<h1>Error loading content</h1>';
@@ -106,6 +66,45 @@ async function importHtml(file, page = '', callback) {
         hideLoading();
     }
 }
+
+async function loadJsFile(filePath) {
+    let loadedScripts = JSON.parse(localStorage.getItem('load_js')) || [];
+
+    if (loadedScripts.includes(filePath)) {
+        return;
+    }
+
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = filePath+'?v='+Math.random();
+        script.onload = () => {
+            loadedScripts.push(filePath);
+            localStorage.setItem('load_js', JSON.stringify(loadedScripts));
+            resolve();
+        };
+        script.onerror = () => reject(new Error(`Failed to load ${filePath}`));
+        document.getElementById('content').appendChild(script);
+    });
+}
+
+
+async function loadScriptsSequentially(scripts, targetElement) {
+    for (let i = 0; i < scripts.length; i++) {
+        const oldScript = scripts[i];
+        const newScript = document.createElement('script');
+
+        if (oldScript.src) {
+            newScript.src = oldScript.src;
+            newScript.onload = () => updateLoadingBar(((i + 1) / scripts.length) * 100);
+        } else {
+            newScript.textContent = oldScript.innerHTML;
+        }
+
+        targetElement.appendChild(newScript);
+        await new Promise(resolve => newScript.onload = resolve);
+    }
+}
+
 
 async function importMenu(file, callback) {
     const targetElement = document.getElementById('menu');
@@ -163,9 +162,6 @@ export function install(file, page = '', callback) {
     }else{
         const ext = file.split('.').pop().toLowerCase();
         switch (ext) {
-            case 'jsu':
-                importJs(file, callback);
-                break;
             case 'uolit':
                 importHtml(file, page, callback);
                 break;
@@ -256,9 +252,31 @@ export const evaluateForIf = async () => {
     }
 }
 
+export const displayDynamicData = async () => {
+    const dataElements = document.querySelectorAll('[u-get]');
+
+    dataElements.forEach(element => {
+        const key = element.getAttribute('u-get')?.trim();
+
+        if (key) {
+            const value = getData(key);
+            if (value !== null) {
+                element.innerText = value;
+            }
+        }
+    });
+};
+
 export const refreshUI = async () => {
     handleImports();
     evaluateForIf();
+    displayDynamicData();
+}
+
+clearAllLoadedScripts();
+
+function clearAllLoadedScripts() {
+    localStorage.removeItem('load_js');
 }
 
 window.addEventListener('load', () => {

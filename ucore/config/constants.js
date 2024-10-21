@@ -3,8 +3,9 @@ const LOGIN = false;
 const AVAILABLE_PAGES = {
     home: 'src/controller/home.uolit',
     sample: 'src/controller/sample.uolit',
+    get: 'src/controller/get.uolit',
 };
-const BASE_URL = 'https://localhost/uolitjs/';
+const BASE_URL = 'https://localhost:90/uolitjs/';
 const BASE_PATH = 'src/controller/';
 const ERROR_404_PATH = 'src/error/404.uolit';
 

@@ -5,10 +5,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>Menu 3 Tingkat Responsif</title>
       <link rel="stylesheet" href="public/plugin/bootstrap/css/bootstrap.min.css">
-      <link rel="stylesheet" href="public/plugin/simple-line-icons/css/simple-line-icons.css">
       <link rel="stylesheet" href="public/assets/css/style.css">
-      <link rel="stylesheet" href="public/assets/css/menu.css">
-      <install u-inst="ucore/router/plugin.jsu"></install>
     </head>
     <body>
 
