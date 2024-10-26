@@ -73,15 +73,16 @@ async function loadJsFile(filePath) {
         return;
     }
 
+    loadedScripts.push(filePath);
+    localStorage.setItem('load_js', JSON.stringify(loadedScripts));
+
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        script.src = filePath+'?v='+Math.random();
-        script.onload = () => {
-            loadedScripts.push(filePath);
-            localStorage.setItem('load_js', JSON.stringify(loadedScripts));
-            resolve();
-        };
+        script.src = filePath + '?v=' + Math.random();
+
+        script.onload = () => resolve();
         script.onerror = () => reject(new Error(`Failed to load ${filePath}`));
+        
         document.getElementById('content').appendChild(script);
     });
 }
