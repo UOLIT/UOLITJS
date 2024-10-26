@@ -120,10 +120,8 @@ const extractPathFromUrl = (url) => {
         let pathWithoutQuery = path.split('?')[0];
 
         let pathArray = pathWithoutQuery.split('/').filter(segment => segment !== '');
-
         if (pathArray.length > 0) {
-            let firstSegment = pathArray[0];
-            return firstSegment;
+            return pathWithoutQuery;
         }
 
         return 'home';
